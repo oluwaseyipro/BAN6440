@@ -17,30 +17,16 @@ class KMeansClustering:
 
     def __init__(self, n_clusters=3):
         self.n_clusters = n_clusters
-
-        # random_state: Enforces deterministic, reproducible algorithm execution.
-        # n_init=10: mitigates the risk of converging on a sub-optimal local minimum
-        # by running the algorithm 10 times with different initial centroid seeds.
         self.model = KMeans(n_clusters=self.n_clusters, random_state=42, n_init=10)
-
-        # Dictionary reserved for capturing required experiment evaluation metrics
         self.metrics_log = {}
 
     def execute_clustering(self, X_scaled):
-        """
-        Fits the K-Means algorithm to the transformed feature matrix,
-        assigns cluster labels, and computes validation metrics.
-        """
+        """Fits K-Means, assigns labels, and computes validation metrics."""
         logging.info(f"\n[ACTION] Executing K-Means with {self.n_clusters} clusters...")
 
         labels = self.model.fit_predict(X_scaled)
 
-        # Inertia measures the within-cluster sum of squares (WCSS).
-        # A lower inertia indicates tighter, more cohesive clusters.
         inertia = self.model.inertia_
-
-        # Silhouette Score measures cluster separation and cohesion (-1 to 1).
-        # Scores closer to 1.0 indicate mathematically distinct segments.
         sil_score = silhouette_score(X_scaled, labels)
 
         # Log metrics to satisfy strict assignment tracking requirements
