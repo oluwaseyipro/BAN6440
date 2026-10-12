@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 
-
+ 
 class DataHandler:
     """
     Manages the initial stages of the data science pipeline: Ingestion,
@@ -16,18 +16,14 @@ class DataHandler:
         self.scaler = StandardScaler()
 
     def load_data(self, url):
-        """
-        Ingests the dataset from the AWS Open Data Registry.
-        """
+        """Ingests the dataset from the AWS Open Data Registry."""
         logging.info("\n[ACTION] Downloading dataset from AWS Open Data...")
         df = pd.read_parquet(url)
         logging.info(f"--- RAW DATA LOADED: {len(df)} rows ---")
         return df
 
     def explore_data(self, df, features):
-        """
-        Executes Exploratory Data Analysis (EDA) to identify structural anomalies.
-        """
+        """Executes Exploratory Data Analysis (EDA) to identify structural anomalies."""
         print("\n" + "=" * 60)
         print("             EXPLORATORY DATA ANALYSIS (EDA)")
         print("=" * 60)
@@ -46,9 +42,7 @@ class DataHandler:
         plt.show()
 
     def preprocess_data(self, df, features):
-        """
-        Executes and explicitly logs the cleaning and transformation transformations.
-        """
+        """Executes and explicitly logs the cleaning and transformation transformations."""
         print("\n" + "=" * 60)
         print("          DATA CLEANING & SCALING TRANSFORMATION")
         print("=" * 60)
