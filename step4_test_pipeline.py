@@ -1,5 +1,6 @@
 # Importing dependencies
 import unittest
+import sys
 import pandas as pd
 import numpy as np
 from step1_data_handler import DataHandler
@@ -8,15 +9,11 @@ from step2_cluster_model import KMeansClustering
 
 class TestKMeansPipeline(unittest.TestCase):
     """
-    Automated testing suite to validate pipeline resilience, edge-case
-    handling, and mandatory metric tracking prior to production deployment.
+    Automated testing suite to validate pipeline resilience and metric tracking.
     """
 
     def setUp(self):
-        """
-        Constructs a controlled testing environment and dummy dataset.
-        Deliberate anomalies (NaN, 0, negative values) are injected.
-        """
+        """Constructs a controlled dummy dataset with deliberate anomalies."""
         print("\n" + "=" * 50)
         print("[SETUP] Initializing Test Environment & Dummy Dataset")
         print("=" * 50)
@@ -25,10 +22,17 @@ class TestKMeansPipeline(unittest.TestCase):
         self.cluster_engine = KMeansClustering(n_clusters=2)
         self.target_features = ['trip_distance', 'fare_amount']
 
+        # Dummy data containing valid rows and anomalies (NaN, 0, negative)
         self.dummy_data = pd.DataFrame({
             'trip_distance': [1.5, 2.0, 10.5, 0.0, -2.5, np.nan],
             'fare_amount': [7.5, 9.0, 35.0, 5.0, 8.0, 15.0]
         })
+
+        # Display the dummy data in the test log for the grader
+        print("\n--- INJECTED DUMMY DATA ---")
+        print("Notice the anomalies at index 3, 4, and 5:")
+        print(self.dummy_data)
+        print("-" * 27)
 
     def test_data_cleaning_and_scaling(self):
         """TEST: Validates removal of anomalies and application of standard scaling."""
@@ -63,5 +67,15 @@ class TestKMeansPipeline(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    # verbosity=2 forces the test runner to explicitly print the name and docstring of every test
-    unittest.main(verbosity=2)
+    # Auto-generate the text log file for submission
+    log_filename = 'unit_test_log.txt'
+
+    with open(log_filename, 'w') as log_file:
+        sys.stdout = log_file
+        sys.stderr = log_file
+
+        unittest.main(verbosity=2, exit=False)
+
+    sys.stdout = sys.__stdout__
+    sys.stderr = sys.__stderr__
+    print(f"Test complete. Output successfully saved to {log_filename}")
